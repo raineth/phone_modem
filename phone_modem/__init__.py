@@ -230,7 +230,7 @@ class PhoneModem:  # pylint: disable=too-many-instance-attributes
             elif cid_field == "NAME":
                 self.cid_name = cid_data
 
-            if self.cid_number and self.cid_name and self.state == self.STATE_RING:
+            if self.cid_number and self.cid_name and self.state != self.STATE_CALLERID:
                 await self._set_state(self.STATE_CALLERID)
                 self.incomingcallnotificationfunc(self.state)
                 _LOGGER.debug(
