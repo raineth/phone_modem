@@ -222,16 +222,15 @@ class PhoneModem:  # pylint: disable=too-many-instance-attributes
             cid_field, cid_data = resp.split("=")
             cid_field = cid_field.strip()
             cid_data = cid_data.strip()
+
             if cid_field == "DATE":
                 self.cid_time = datetime.now()
-                continue
-
-            if cid_field == "NMBR":
+            elif cid_field in ("NMBR", "DDN_NMBR"):
                 self.cid_number = cid_data
-                continue
-
-            if cid_field == "NAME":
+            elif cid_field == "NAME":
                 self.cid_name = cid_data
+
+            if self.cid_number and self.cid_name and self.state == self.STATE_RING:
                 await self._set_state(self.STATE_CALLERID)
                 self.incomingcallnotificationfunc(self.state)
                 _LOGGER.debug(
